@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import rtf.RtfGenerator;
+import sqlite.SQLiteJDBC;
 
 import com.tutego.jrtf.*;
 
@@ -38,14 +39,19 @@ public class Main {
 //	    }
 //	    catch ( IOException e ) { e.printStackTrace(); }
 //	  }
-		RtfGenerator rtg = new RtfGenerator("./test.rtf");
-		String sec1 = "aaaaaaaaaaaaaa \t aaaaaaaaaaaaaaaa \n aaaaaaaaaaaaaa";
-		String sec2 = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
-		String sec3 = "cccccccccccccccccccccccccccccccccccccccccccc";
-		rtg.addSection(sec1, RtfHeaderStyle.HEADER_1, "First section", "Random footnote1");
-		rtg.addSection(sec2, RtfHeaderStyle.HEADER_2, "Second section", "Random footnote2");
-		rtg.addSection(sec3, RtfHeaderStyle.HEADER_3, "Third section", "Random footnote3");
-		rtg.outputFile();
+//		RtfGenerator rtg = new RtfGenerator("./test.rtf");
+//		String sec1 = "aaaaaaaaaaaaaa \t aaaaaaaaaaaaaaaa \n aaaaaaaaaaaaaa";
+//		String sec2 = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+//		String sec3 = "cccccccccccccccccccccccccccccccccccccccccccc";
+//		rtg.addSection(sec1, RtfHeaderStyle.HEADER_1, "First section", "Random footnote1");
+//		rtg.addSection(sec2, RtfHeaderStyle.HEADER_2, "Second section", "Random footnote2");
+//		rtg.addSection(sec3, RtfHeaderStyle.HEADER_3, "Third section", "Random footnote3");
+//		rtg.outputFile();
+		
+		SQLiteJDBC db = new SQLiteJDBC();
+//		db.listAllMeta();
+//		db.listMeta(1);
+		db.executeTest(1);
 	  }
 }
 

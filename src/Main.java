@@ -6,6 +6,7 @@ import static com.tutego.jrtf.RtfUnit.CM;
 
 import java.awt.Desktop;
 import java.io.*;
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,8 @@ public class Main {
 
 	public static void main( String... args ) throws IOException
 	  {
+		String reportDest;
+		Scanner input = new Scanner(System.in);
 //	    File out = new File( "out-toc.rtf" );
 //
 //	    rtf().headerStyles( RtfHeaderStyle.values() )
@@ -39,14 +42,16 @@ public class Main {
 //	    }
 //	    catch ( IOException e ) { e.printStackTrace(); }
 //	  }
-//		RtfGenerator rtg = new RtfGenerator("./test.rtf");
+		System.out.print("Enter Report Destination (use two slashes): ");
+		reportDest = input.next();
+		RtfGenerator rtg = new RtfGenerator(reportDest + "\\test.rtf");
 //		String sec1 = "aaaaaaaaaaaaaa \t aaaaaaaaaaaaaaaa \n aaaaaaaaaaaaaa";
 //		String sec2 = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 //		String sec3 = "cccccccccccccccccccccccccccccccccccccccccccc";
 //		rtg.addSection(sec1, RtfHeaderStyle.HEADER_1, "First section", "Random footnote1");
 //		rtg.addSection(sec2, RtfHeaderStyle.HEADER_2, "Second section", "Random footnote2");
 //		rtg.addSection(sec3, RtfHeaderStyle.HEADER_3, "Third section", "Random footnote3");
-//		rtg.outputFile();
+		rtg.outputFile();
 		
 		SQLiteJDBC db = new SQLiteJDBC();
 //		db.listAllMeta();

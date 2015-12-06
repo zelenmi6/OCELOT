@@ -1,23 +1,14 @@
-import static com.tutego.jrtf.Rtf.rtf;
-
-import static com.tutego.jrtf.RtfHeader.font;
-import static com.tutego.jrtf.RtfPara.*;
-import static com.tutego.jrtf.RtfText.*;
-import static com.tutego.jrtf.RtfUnit.CM;
-
-import java.awt.Desktop;
-import java.io.*;
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 import rtf.RtfGenerator;
 import sqlite.SQLiteJDBC;
 
-import com.tutego.jrtf.*;
+import com.tutego.jrtf.RtfHeaderStyle;
 
-import static com.tutego.jrtf.RtfFields.tableOfContentsField;
+import dbConnections.DbManager;
+import dbConnections.DbManagerBuilder;
 
 
 public class Main {
@@ -41,7 +32,23 @@ public class Main {
 		rtg.addSection(sec3, RtfHeaderStyle.HEADER_3, "Third section", "Random footnote3");
 		rtg.outputFile();
 		
-		
+		try {
+			DbManager manager = new DbManagerBuilder(DbManager.DbType.SQLite, "socialNetwork.db").buildDbManager();
+			ResultSet rs = manager.executeQuery("Select * from students");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnsNumber = rsmd.getColumnCount();
+			while (rs.next()) {
+			    for (int i = 1; i <= columnsNumber; i++) {
+			        if (i > 1) System.out.print(",  ");
+			        String columnValue = rs.getString(i);
+			        System.out.print(columnValue + " " + rsmd.getColumnName(i));
+			    }
+			    System.out.println("");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	  }
 }
 

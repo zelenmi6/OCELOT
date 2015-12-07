@@ -8,9 +8,11 @@ import java.sql.SQLException;
 
 public class SQLiteJDBC {
 	private Connection c = null;
-    private PreparedStatement listAll;
-    private PreparedStatement listById;
-    private PreparedStatement listQueries;
+    private PreparedStatement listAllMeta;
+    private PreparedStatement listMetaById;
+    private PreparedStatement listQueriesByMeta;
+    private PreparedStatement listReportById;
+    private PreparedStatement listQueryById;
     private final String dbName = "jdbc:sqlite:serval.db";
 
 	public SQLiteJDBC() {
@@ -19,11 +21,15 @@ public class SQLiteJDBC {
 			c = DriverManager.getConnection(dbName);
 			System.out.println("Connection successful");
 			
-			listAll = c.prepareStatement("select * from meta");
-			listById = c.prepareStatement("select * from meta "
+			listAllMeta = c.prepareStatement("select * from meta");
+			listMetaById = c.prepareStatement("select * from meta "
 					+ "where id = ?");
-			listQueries = c.prepareStatement("select * from queries "
+			listQueriesByMeta = c.prepareStatement("select * from queries "
 					+ "where meta_id = ?");
+			listReportById = c.prepareStatement("select * from reports "
+					+ "where id = ?");
+			listQueryById = c.prepareStatement("select * from queries "
+					+ "where id = ?");
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
@@ -32,10 +38,23 @@ public class SQLiteJDBC {
 		}
 	}
 	
+	public ResultSet getQuery(int id) {
+		try {
+			listQueryById.setInt(1, id);
+			ResultSet rs = listQueryById.executeQuery();
+			return rs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("There has been an error in the getQuery function");
+		return null;
+	}
+	
 	public String listAllMeta() {
 		String string = ""; 
 		try {
-			ResultSet rs = listAll.executeQuery();
+			ResultSet rs = listAllMeta.executeQuery();
 			while (rs.next()) {
 				string = string + rs.getString(1) + "\t" + rs.getString(2) + "\t"
 						+ rs.getString(3) + "\t" + rs.getString(4) + "\t";
@@ -49,15 +68,15 @@ public class SQLiteJDBC {
 		return string;
 	}
 	
-	public ResultSet listMeta(int id) {
+	public ResultSet getMeta(int id) {
 		try {
-			listById.setInt(1, id);
-			ResultSet rs = listById.executeQuery();
-			while (rs.next()) {
-				System.out.println(rs.getInt(1) + "\t" + rs.getString(2) + "\t" +
-									rs.getString(3) + "\t" + rs.getString(4) + "\t");
-			}
-			System.out.println("listMeta----------------------------------");
+			listMetaById.setInt(1, id);
+			ResultSet rs = listMetaById.executeQuery();
+//			while (rs.next()) {
+//				System.out.println(rs.getInt(1) + "\t" + rs.getString(2) + "\t" +
+//									rs.getString(3) + "\t" + rs.getString(4) + "\t");
+//			}
+//			System.out.println("listMeta----------------------------------");
 			return rs;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -66,12 +85,25 @@ public class SQLiteJDBC {
 		}
 	}
 	
+	public ResultSet getReport(int id) {
+		try {
+			listReportById.setInt(1, id);
+			ResultSet rs = listReportById.executeQuery();
+			return rs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("There has been an error in getReport function");
+		return null;
+	}
+	
 	public String executeTest(int id) {
 		String string ="";
-		ResultSet metaRs = listMeta(id);
+		ResultSet metaRs = getMeta(id);
 		try {
-			listQueries.setInt(1, id);
-			ResultSet queriesRs = listQueries.executeQuery();
+			listQueriesByMeta.setInt(1, id);
+			ResultSet queriesRs = listQueriesByMeta.executeQuery();
 			while (queriesRs.next()) {
 				string = string + queriesRs.getInt(1) + "\t" + queriesRs.getInt(2) + "\t" +
 						queriesRs.getString(3) + "\t" + queriesRs.getString(4) + "\t" + queriesRs.getString(5);

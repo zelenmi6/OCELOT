@@ -1,13 +1,19 @@
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.util.Arrays;
+import java.util.List;
 
 import rtf.RtfGenerator;
 import sqlite.SQLiteJDBC;
 
 import com.tutego.jrtf.RtfHeaderStyle;
+import com.tutego.jrtf.RtfTextPara.TabKind;
+import com.tutego.jrtf.RtfTextPara.TabLead;
+import com.tutego.jrtf.RtfUnit;
 
 import dbConnections.DbManager;
+import dbConnections.DbManager.DbType;
 import dbConnections.DbManagerBuilder;
 
 
@@ -15,40 +21,30 @@ public class Main {
 
 	public static void main( String... args ) throws IOException
 	  {
-		//String reportDest;
-		//Scanner input = new Scanner(System.in);
-		//System.out.print("Enter Report Destination (use two slashes): ");
-		//reportDest = input.next();
-		//RtfGenerator rtg = new RtfGenerator(reportDest + "\\test.rtf");
-	    
-		SQLiteJDBC db = new SQLiteJDBC();
-	 
-		RtfGenerator rtg = new RtfGenerator("src\\ReportArchive\\test.rtf");
-		String sec1 = db.listAllMeta();
-		String sec2 = db.executeTest(1);
-		String sec3 = db.executeTest(2);
-		rtg.addSection(sec1, RtfHeaderStyle.HEADER_1, "First section", "Random footnote1");
-		rtg.addSection(sec2, RtfHeaderStyle.HEADER_2, "Second section", "Random footnote2");
-		rtg.addSection(sec3, RtfHeaderStyle.HEADER_3, "Third section", "Random footnote3");
-		rtg.outputFile();
+		/*By Jacob:
+		String reportDest;
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter Report Destination (use two slashes): ");
+		reportDest = input.next();
+		RtfGenerator rtg = new RtfGenerator(reportDest + "\\test.rtf");
+		*/
 		
+		List<Integer> queries= Arrays.asList(1, 2, 3);
+		RtfGenerator rtg = new RtfGenerator("src\\ReportArchive\\test.rtf");
 		try {
 			DbManager manager = new DbManagerBuilder(DbManager.DbType.SQLite, "socialNetwork.db").buildDbManager();
 			ResultSet rs = manager.executeQuery("Select * from students");
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnsNumber = rsmd.getColumnCount();
-			while (rs.next()) {
-			    for (int i = 1; i <= columnsNumber; i++) {
-			        if (i > 1) System.out.print(",  ");
-			        String columnValue = rs.getString(i);
-			        System.out.print(columnValue + " " + rsmd.getColumnName(i));
-			    }
-			    System.out.println("");
-			}
+			
+			//Add to the rtf file
+			rtg.addHeader("Report Title", queries, DbType.SQLite);
+			rtg.AddQuery(1, "Select * from students", rs, "Some description", "Some conclusion");
+			rtg.outputFile();
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	  }
 }
 

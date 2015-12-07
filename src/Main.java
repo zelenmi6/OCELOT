@@ -6,6 +6,7 @@ import java.util.List;
 
 import rtf.RtfGenerator;
 import sqlite.SQLiteJDBC;
+import ReportArchive.Report;
 
 import com.tutego.jrtf.RtfHeaderStyle;
 import com.tutego.jrtf.RtfTextPara.TabKind;
@@ -29,8 +30,10 @@ public class Main {
 		RtfGenerator rtg = new RtfGenerator(reportDest + "\\test.rtf");
 		*/
 		
+		//By Karen
 		List<Integer> queries= Arrays.asList(1, 2, 3);
 		RtfGenerator rtg = new RtfGenerator("src\\ReportArchive\\test.rtf");
+		
 		try {
 			DbManager manager = new DbManagerBuilder(DbManager.DbType.SQLite, "socialNetwork.db").buildDbManager();
 			ResultSet rs = manager.executeQuery("Select * from students");
@@ -40,10 +43,16 @@ public class Main {
 			rtg.AddQuery(1, "Select * from students", rs, "Some description", "Some conclusion");
 			rtg.outputFile();
 			
-		} catch (Exception e) {
+			/*By Milan:
+			if (manager != null) {
+				Report report = new Report(manager, 1);
+			}*/
+			
+			} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+			}
+
 		
 	  }
 }

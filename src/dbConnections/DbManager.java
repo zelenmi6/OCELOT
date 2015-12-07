@@ -47,7 +47,7 @@ public class DbManager {
 		
 		urlBuilder.append(URL);
 		
-		if (port != null) {
+		if (port != "") {
 			urlBuilder.append(":");
 			urlBuilder.append(port);
 		}

@@ -32,13 +32,16 @@ import org.eclipse.swt.widgets.List;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class UI {
 
 	protected Shell shell;
 	private Text text;
-	private Text text_1;
 	private Text text_2;
+	private Text text_3;
+	private Text text_1;
 	
 	public void open() {
 		Display display = Display.getDefault();
@@ -54,30 +57,31 @@ public class UI {
 
 	/**
 	 * Create contents of the window.
+	 * @wbp.parser.entryPoint
 	 */
 	
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(450, 263);
-		shell.setText("SWT Application");
+		shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		shell.setSize(450, 333);
 		
 		text = new Text(shell, SWT.BORDER);
 		text.setBounds(137, 31, 76, 21);
 		
-		text_1 = new Text(shell, SWT.BORDER);
-		text_1.setEditable(false);
-		text_1.setBounds(137, 72, 76, 21);
-		
 		text_2 = new Text(shell, SWT.BORDER);
 		text_2.setEditable(false);
-		text_2.setBounds(137, 120, 76, 21);
+		text_2.setBounds(137, 125, 76, 21);
+		
+		text_3 = new Text(shell, SWT.BORDER);
+		text_3.setEditable(false);
+		text_3.setBounds(235, 31, 76, 21);
 		
 		Label lblUsername = new Label(shell, SWT.NONE);
 		lblUsername.setBounds(137, 58, 55, 15);
 		lblUsername.setText("Username");
 		
 		Label lblPassword = new Label(shell, SWT.NONE);
-		lblPassword.setBounds(137, 99, 55, 15);
+		lblPassword.setBounds(137, 104, 55, 15);
 		lblPassword.setText("Password");
 		
 		Label lblLocation = new Label(shell, SWT.NONE);
@@ -88,6 +92,8 @@ public class UI {
 		btnLocal.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				
+				text_3.setEditable(false);
 				
 			    JFileChooser chooser = new JFileChooser();
 			    chooser.setCurrentDirectory(new java.io.File("."));
@@ -109,7 +115,14 @@ public class UI {
 		btnLocal.setText("Local");
 		
 		final Button btnRemote = new Button(shell, SWT.RADIO);
-		btnRemote.setBounds(10, 98, 90, 16);
+		btnRemote.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				text.setText("");
+				text_3.setEditable(true);
+			}
+		});
+		btnRemote.setBounds(10, 103, 90, 16);
 		btnRemote.setText("Remote");
 		
 		final Label lblHello = new Label(shell, SWT.NONE);
@@ -215,7 +228,10 @@ public class UI {
 						
 						try 
 						{
-							manager = new DbManagerBuilder(dbtype, text.getText()).buildDbManager();	
+							DbManagerBuilder dbbuild = new DbManagerBuilder(dbtype, text.getText());
+							dbbuild.port(text_3.getText());
+							dbbuild.credentials(text_1.getText(), text_2.getText());
+							manager = dbbuild.buildDbManager();	
 						} 
 						catch (Exception e) 
 						{
@@ -262,7 +278,23 @@ public class UI {
 		});
 		btnConnectWithUsername.setBounds(10, 166, 231, 16);
 		btnConnectWithUsername.setText("Connect With Username and Password");
+		
+		Label lblPort = new Label(shell, SWT.NONE);
+		lblPort.setEnabled(true);
+		lblPort.setBounds(235, 10, 55, 15);
+		lblPort.setText("Port");
+		
+		StyledText styledText = new StyledText(shell, SWT.READ_ONLY | SWT.WRAP);
+		styledText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		styledText.setEnabled(false);
+		styledText.setEditable(false);
+		styledText.setDoubleClickEnabled(false);
+		styledText.setText("Select Local or Remote, enter Location. If a Username and Password are needed, select the checkmark box and enter information. Finally, select MYSQL, SQLite, or Oracle and press connect.");
+		styledText.setBounds(10, 220, 414, 64);
+		
+		text_1 = new Text(shell, SWT.BORDER);
+		text_1.setEditable(false);
+		text_1.setBounds(137, 79, 76, 21);
 
 	}
-
 }

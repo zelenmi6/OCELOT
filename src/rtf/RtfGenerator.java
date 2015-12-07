@@ -46,6 +46,7 @@ public class RtfGenerator {
 	public RtfGenerator(String fileName) {
 		out = new File(fileName);
 		rtfObject = Rtf.rtf();
+		
 	}
 	
 	/**
@@ -98,13 +99,29 @@ public class RtfGenerator {
 		try{
 		ResultSetMetaData rsmd = rs.getMetaData();
 		int columnsNumber = rsmd.getColumnCount();
+		// add table header
+		for (int i = 1; i <= columnsNumber; i++) {
+			String columnValue = rs.getString(i);
+			resultString = resultString +rsmd.getColumnName(i)+"\t";
+			//if (i == 4) resultString = resultString + "\t\t";
+			}
+		resultString = resultString + "\n";
 		while (rs.next()) {
+			// add cells
 		    for (int i = 1; i <= columnsNumber; i++) {
-		        if (i > 1) resultString = resultString + ",  ";
-		        String columnValue = rs.getString(i);
-		        resultString = resultString + columnValue + " " + rsmd.getColumnName(i);
+		    	String columnValue = rs.getString(i);
+		    	resultString = resultString + columnValue;
+		        if (i > 1 && i< columnsNumber) {
+		        	Integer space = 11 - columnValue.length();
+		        	System.out.println("i: "+i+" space: "+space);
+		        	for (int j=0; j<space; j++){
+		        		resultString = resultString+ " ";
+		        	}
+		        }else{
+		        	resultString = resultString+ "\t\t ";
+		        }
 		    }
-		    resultString = resultString + "";
+		    resultString = resultString + "\n";
 		}
 		}catch(Exception e) {
 			// TODO Auto-generated catch block

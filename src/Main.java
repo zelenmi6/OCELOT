@@ -18,7 +18,10 @@ import dbConnections.DbManager;
 import dbConnections.DbManager.DbType;
 import dbConnections.DbManagerBuilder;
 
-
+/*Note: When using your copy, be sure to change the reference library for sqlite jdbc library,
+ * couldn't find a way to make that automatic within the project. Would have liked to have that
+ *  implemented if we had more time. Granted we were using eclipse.
+ */
 public class Main {
 
 	public static void main( String... args ) throws IOException
@@ -31,8 +34,8 @@ public class Main {
 		RtfGenerator rtg = new RtfGenerator(reportDest + "\\test.rtf");
 		*/
 		
-		UI sdf = new UI();
-		sdf.open();
+		UI uinew = new UI();
+		uinew.open();
 		
 	  }
 }

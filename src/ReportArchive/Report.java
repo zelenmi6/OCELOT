@@ -9,8 +9,18 @@ import java.util.List;
 import sqlite.SQLiteJDBC;
 import dbConnections.DbManager;
 
+/**
+ * This class automatically executes a test specified in its constructor
+ * @author Milan Zelenka
+ *
+ */
 public class Report {
 	
+	/**
+	 * 
+	 * @param dbManager reference to the DbManager that is being used
+	 * @param reportId Id of the reports that is going to be run
+	 */
 	public Report(DbManager dbManager, int reportId) {
 		
 		
@@ -84,7 +94,6 @@ public class Report {
 			
 			// Run query against the target database
 			ResultSet queryResultRs = dbManager.executeQuery(queryString);
-			System.out.println(title + intro + conclusion);
 			// RTF.AddQuery(queryId, queryString, queryResultRs, intro, conclusion)
 		}
 	}

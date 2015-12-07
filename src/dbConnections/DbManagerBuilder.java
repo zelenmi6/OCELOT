@@ -16,6 +16,12 @@ public class DbManagerBuilder {
 	private String password = null;
 	private String dbName = null;
 	
+	/**
+	 * 
+	 * @param dbType Enum from  DbManager specifying what database you are connecting to
+	 * @param URL URL to the database. Make sure the string starts with '//' 
+	 * if the database is not a file on local filesystem
+	 */
 	public DbManagerBuilder(DbManager.DbType dbType, String URL) {
 		this.dbType = dbType;
 		this.URL = URL;

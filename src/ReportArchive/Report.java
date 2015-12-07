@@ -1,6 +1,7 @@
 package ReportArchive;
 
 import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,6 +9,8 @@ import java.util.List;
 
 import sqlite.SQLiteJDBC;
 import dbConnections.DbManager;
+import dbConnections.DbManager.DbType;
+import rtf.RtfGenerator;
 
 /**
  * This class automatically executes a test specified in its constructor
@@ -30,7 +33,11 @@ public class Report {
 		String title = getTitle(reportInfo);
 		List<Integer> queryNumbers = getQueryNumbers(reportInfo);
 		// Add header to the RTF
-		runQueries(queryNumbers, reportDb, dbManager/*, RTFDocument*/);
+		RtfGenerator rtg = new RtfGenerator("src\\ReportArchive\\test.rtf");
+		rtg.addHeader(title, queryNumbers, DbType.SQLite); //dbType hard coded.
+		runQueries(queryNumbers, reportDb, dbManager, rtg);
+		rtg.outputFile();
+		
 	}
 	
 	private String getTitle(ResultSet reportInfo) {
@@ -61,7 +68,7 @@ public class Report {
 	}
 	
 	private void runQueries(List<Integer> queryNumbers, SQLiteJDBC reportDb,
-			DbManager dbManager /*, RTFDocument*/) {
+			DbManager dbManager ,RtfGenerator rtg ) {
 		for (Integer queryId : queryNumbers) {
 			// Get query information and its meta
 			ResultSet queryRs = reportDb.getQuery(queryId);
@@ -94,7 +101,8 @@ public class Report {
 			
 			// Run query against the target database
 			ResultSet queryResultRs = dbManager.executeQuery(queryString);
-			// RTF.AddQuery(queryId, queryString, queryResultRs, intro, conclusion)
+			rtg.AddQuery(queryId, queryString, queryResultRs, intro, conclusion);
+			
 		}
 	}
 	

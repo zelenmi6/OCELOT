@@ -6,6 +6,7 @@ import java.util.List;
 
 import rtf.RtfGenerator;
 import sqlite.SQLiteJDBC;
+import ui.UI;
 import ReportArchive.Report;
 
 import com.tutego.jrtf.RtfHeaderStyle;
@@ -30,19 +31,8 @@ public class Main {
 		RtfGenerator rtg = new RtfGenerator(reportDest + "\\test.rtf");
 		*/
 		
-		DbManager manager = null;
-		
-		try {
-			manager = new DbManagerBuilder(DbManager.DbType.SQLite, "socialNetwork.db").buildDbManager();
-			
-			} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			}
-		
-		if (manager != null) {
-			Report report = new Report(manager, 1);
-		}
+		UI sdf = new UI();
+		sdf.open();
 		
 	  }
 }
